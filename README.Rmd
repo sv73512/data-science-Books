@@ -1,0 +1,13 @@
+---
+title: "README"
+output: html_document
+---
+
+This is a project by Sunith Vallabhaneni analyzing data on books on the website
+[Goodreads](https://goodreads.com/). 
+
+
+It uses a dataset from [Kaggle](https://www.kaggle.com/datasets/mdhamani/goodreads-books-100k), which contains the book title, author, genre, book format, number of reviews, average review score, and page count. 
+
+ 
+
