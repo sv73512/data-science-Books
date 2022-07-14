@@ -1,0 +1,88 @@
+---
+title: "Data Processing"
+output: html_document
+date: '2022-07-13'
+---
+#### Introduction to dplyr
+
+dplyr is an R package in the tidyverse. We can load the package using
+
+We can filter our data using 'filter()'
+
+-nominal variables are ranked alphabetically, while ordinal variables have a 
+built in rank
+
+```{r}
+library(dplyr)
+
+
+filter(starwars, hair_color %in% c("blonde","blond"))
+
+importantPlanets <- c("Tatooine", "Naboo", "Hoth")
+filter(starwars, homeworld %in% importantPlanets)
+
+filter(starwars, hair_color == 'blond' | hair_color == 'blonde')
+filter(starwars, hair_color == 'black' & skin_color == 'fair')
+filter(starwars, hair_color == 'black', skin_color == 'dark', 
+       eye_color == "brown", mass == 79)
+
+filteredData <- filter(starwars, species == 'Human')
+
+filter(starwars, mass<=75, height<=165)
+
+```
+```{r}
+library(ggplot2)
+head(diamonds) #gives you first 6 rows
+class(diamonds$cut) #gives you a specific type of data
+summary(diamonds$cut) #gives you a count of each category if categorical, summary stats if numeric
+head(diamonds$cut) #first 6 values (and levels)
+filter(diamonds, cut > "Good")
+unique(starwars$eye_color)
+factor(starwars$eye_color, c("red", "orange", "gold", "yellow", 
+                             "blue", "black"), ordered = T)
+
+
+### Missing Values
+NA > 5 #it doesn't kniw
+NA + 10
+NA/2
+NA == NA
+mary_age <- NA
+paul_age <- NA
+
+mass <- NA
+mass == 10
+is.na(mass)
+
+filter(starwars, mass!=75 | is.na(mass), name<"Mace")
+
+filter(starwars, mass>100, height<185)
+
+filter(starwars, is.na(hair_color))
+
+
+```
+
+### Arranging/Removing data
+'arrange()' reorders rows. Does not remove any rows.
+mutate() #adds new columns to the end of your dataset
+
+```{r}
+arrange(starwars, birth_year) #na values always are at the end
+arrange(starwars, desc(birth_year)) 
+arrange(starwars, hair_color)
+starwars_small <- select(starwars, height, mass, birth_year)
+
+starwars_small <- mutate(starwars_small, height_m = height/100)
+mutate(starwars_small, bmi = mass/(height_m^2)) 
+#use transmute if you want to only keep new columns  
+                                                
+species_masses <- summarize(group_by(starwars,species),
+              mean_mass = mean(mass, na.rm = T), count = n())
+#function(x,y) is the same as %>% function(y)
+species_masses <- starwars %>%
+  group_by(species)
+
+arrange(species_masses, desc(mean_mass))
+```
